@@ -27,6 +27,10 @@ namespace Play.Catalog.Service.Controller
     public IActionResult GetById(Guid id)
     {
       var item = items.Where(x => x.Id == id).SingleOrDefault();
+      if (item == null)
+      {
+        return NotFound();
+      }
       return Ok(item);
     }
 
@@ -42,6 +46,11 @@ namespace Play.Catalog.Service.Controller
     public ActionResult<ItemDto> Update(Guid id, UpdatedItemDto item)
     {
       var existingItem = items.Where(x => x.Id == id).SingleOrDefault();
+      if (existingItem == null)
+      {
+        return NotFound();
+      }
+
       var updateItem = existingItem with
       {
         Name = item.Name,
@@ -59,6 +68,11 @@ namespace Play.Catalog.Service.Controller
     public ActionResult<ItemDto> Delete(Guid id)
     {
       var index = items.FindIndex(existingItem => existingItem.Id == id);
+      if (index < 0)
+      {
+        return NotFound();
+      }
+      
       items.RemoveAt(index);
 
       return NoContent();
