@@ -1,11 +1,9 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using System.ComponentModel.DataAnnotations;
 
 namespace Play.Catalog.Service.Entities
 {
-
-    public class Item
+    public class Item : IEntity
     {
 
         [BsonRepresentation(BsonType.String)]

@@ -1,15 +1,15 @@
 using System.Text.Json;
 using MongoDB.Driver;
 using Play.Catalog.Service.Configuration.MongoDbSettings;
-using Play.Catalog.Service.Configuration.ServiceSettings;
 using Play.Catalog.Service.Repository;
+using Play.Catalog.Service.Entities;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 // setup json configuration
 builder.Services.AddSingleton(serviceProvider =>
 {
-
     var mongoSetting = builder.Configuration.GetSection(MongoDbSettings.Setting)
     .Get<MongoDbSettings>();
 
@@ -17,7 +17,12 @@ builder.Services.AddSingleton(serviceProvider =>
     return mongoClient.GetDatabase("Catalog");
 });
 
-builder.Services.AddSingleton<IItemsRepository, ItemsRepository>();
+builder.Services.AddSingleton<IRepository<Item>>(serviceProvider =>
+{
+    var database = serviceProvider.GetService<IMongoDatabase>();
+    return new MongoRepository<Item>(database, "items");
+
+});
 
 // Add services to the container.
 builder.Services.AddControllers(options =>
