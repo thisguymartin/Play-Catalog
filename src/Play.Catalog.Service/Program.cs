@@ -8,21 +8,8 @@ using Play.Catalog.Service.Entities;
 var builder = WebApplication.CreateBuilder(args);
 
 // setup json configuration
-builder.Services.AddSingleton(serviceProvider =>
-{
-    var mongoSetting = builder.Configuration.GetSection(MongoDbSettings.Setting)
-    .Get<MongoDbSettings>();
 
-    var mongoClient = new MongoClient(mongoSetting.ConnectionString);
-    return mongoClient.GetDatabase("Catalog");
-});
-
-builder.Services.AddSingleton<IRepository<Item>>(serviceProvider =>
-{
-    var database = serviceProvider.GetService<IMongoDatabase>();
-    return new MongoRepository<Item>(database, "items");
-
-});
+builder.Services.AddMongo().AddMongoRepository<Item>("item");
 
 // Add services to the container.
 builder.Services.AddControllers(options =>
