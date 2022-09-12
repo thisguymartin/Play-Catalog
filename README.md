@@ -17,3 +17,9 @@ dotnet format
 ```bash
 dotnet run
 ```
+
+## Add nuget project to the catalog service
+
+```
+dotnet nuget add source ../packages 
+```
